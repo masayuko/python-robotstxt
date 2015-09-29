@@ -155,3 +155,13 @@ def test_parse_12():
     assert t1.can_fetch('*', '/a/b/c') == True
     assert t2.can_fetch('*', '/a/b/c') == False
     assert t3.can_fetch('*', '/a/b/c') == True
+
+def test_parse_13():
+    testdata = ['User-agent: *',
+                'Disallow: /あ.html']
+    r = parse(testdata)
+    t = TestAgent('https://www.example.com/', r)
+    assert t.can_fetch('*', '/あ.html') == False
+    assert t.can_fetch('*', '/%E3%81%82.html') == False
+    assert t.can_fetch('*', '/い.html') == True
+

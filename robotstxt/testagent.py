@@ -94,6 +94,7 @@ class RulesetForTest(object):
                                 reverse=True)
 
     def _getpattern(self, path):
+        path = urilib.uriencode_plus(path, safe='/$*?=&;@,#')
         if path[-1] == '$':
             appendix = r'$'
             path = path[:-1]
