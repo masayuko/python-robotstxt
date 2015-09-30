@@ -2,7 +2,7 @@
 import re
 import urilib
 from unicodedata import normalize as unicodenormalize
-
+from .baseobject import encode_path
 
 class TestAgent(object):
     """ Test Agent """
@@ -95,14 +95,7 @@ class RulesetForTest(object):
                                 reverse=True)
 
     def _getpattern(self, path):
-        splited = urilib.urisplit(path)
-        epath = urilib.uriencode(splited.path, safe='/$*?=&;@,#')
-        if splited.query:
-            query = urilib.uriencode_plus(splited.query, safe='/$*?=&;@,#')
-            path = epath + '?' + query
-        else:
-            path = epath
-
+        path = encode_path(path)
         if path[-1] == '$':
             appendix = r'$'
             path = path[:-1]

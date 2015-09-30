@@ -61,7 +61,7 @@ def parse(lines):
             previous_line_was_a_user_agent = False
         elif field == 'crawl-delay' and data:
             try:
-                crawl_delay = float(data)
+                crawl_delay = int(data)
                 if not current_ruleset:
                     current_ruleset = Ruleset()
                     current_ruleset.add_robot_name('*')

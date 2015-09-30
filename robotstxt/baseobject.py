@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import urilib
 
 
 class RobotsTxt(object):
@@ -38,3 +39,17 @@ class Ruleset(object):
 
     def add_sitemap(self, path):
         self.sitemaps.append(path)
+
+
+def encode_path(path):
+    splited = urilib.urisplit(path)
+    epath = urilib.uriencode(splited.path, safe='/$*?=&;@,#')
+    if splited.query:
+        query = urilib.uriencode_plus(splited.query, safe='/$*?=&;@,#')
+        path = epath + '?' + query
+    else:
+        if path[-1] == '?':
+            path = epath + '?'
+        else:
+            path = epath
+    return path
