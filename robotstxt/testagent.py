@@ -79,8 +79,9 @@ class RulesetForTest(object):
         for rule in original.rules:
             if rule[0]:
                 # Allow
-                self.rules.append((True, rule[1],
-                                   re.compile(self._getpattern(rule[1]))))
+                if rule[1]:
+                    self.rules.append((True, rule[1],
+                                       re.compile(self._getpattern(rule[1]))))
             else:
                 # Disallow
                 if rule[1]:
@@ -94,7 +95,14 @@ class RulesetForTest(object):
                                 reverse=True)
 
     def _getpattern(self, path):
-        path = urilib.uriencode_plus(path, safe='/$*?=&;@,#')
+        splited = urilib.urisplit(path)
+        epath = urilib.uriencode(splited.path, safe='/$*?=&;@,#')
+        if splited.query:
+            query = urilib.uriencode_plus(splited.query, safe='/$*?=&;@,#')
+            path = epath + '?' + query
+        else:
+            path = epath
+
         if path[-1] == '$':
             appendix = r'$'
             path = path[:-1]

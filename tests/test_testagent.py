@@ -158,10 +158,15 @@ def test_parse_12():
 
 def test_parse_13():
     testdata = ['User-agent: *',
-                'Disallow: /あ.html']
+                'Disallow: /あ.html',
+                'Disallow: /う.html$',
+                'Disallow: /え.html?',
+                'Allow: /え.html?名前=*']
     r = parse(testdata)
     t = TestAgent('https://www.example.com/', r)
     assert t.can_fetch('*', '/あ.html') == False
     assert t.can_fetch('*', '/%E3%81%82.html') == False
     assert t.can_fetch('*', '/い.html') == True
-
+    assert t.can_fetch('*', '/う.html') == False
+    assert t.can_fetch('*', '/え.html?年齢=不詳') == False
+    assert t.can_fetch('*', '/え.html?名前=なまえ') == True
